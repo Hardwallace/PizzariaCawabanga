@@ -1,6 +1,6 @@
 import cors from "cors";
 import "dotenv/config";
-import express from "express";
+import express, { NextFunction } from "express";
 import { router } from "./routes";
 import { Request, Response} from 'express';
 
@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 app.use(router);
 
-app.use((error: Error, req: Request, res: Response) => {
+app.use((error: Error, _: Request, res: Response, __: NextFunction) => {
 
   if(error instanceof Error){
     return res.status(400).json({

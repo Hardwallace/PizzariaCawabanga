@@ -7,21 +7,17 @@ import { DetailUserController } from "./controllers/user/DetailUserController";
 import { IsAuthenticated } from "./middlewares/IsAuthenticated";
 import { CreateCategoryController } from "./controllers/category/CreateCategoryController"
 import { IsAdmin } from "./middlewares/IsAdmin";
+import { createCategorySchema } from "./schemas/categorySchema"; 
 
 
 const router = Router();
 
-// Rotas Users
-router.post(
-  "/users",
-  validateSchema(createUserSchema),
-  new CreateUserController().handle
-);
+router.post("/users", validateSchema(createUserSchema), new CreateUserController().handle);
 
-router.post("/session" , validateSchema(authUserSchema), new AuthUserController().handle)
+router.post("/session" , validateSchema(authUserSchema), new AuthUserController().handle);
 
-router.get("/me" , IsAuthenticated , new DetailUserController().handle)
+router.post("/category" , IsAuthenticated , IsAdmin , validateSchema(createCategorySchema), new CreateCategoryController().handle);
 
-router.post("/category" , IsAuthenticated , IsAdmin , new CreateCategoryController().handle)
+router.get("/me" , IsAuthenticated , new DetailUserController().handle);
 
 export { router };

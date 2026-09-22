@@ -5,3 +5,6 @@
 - Typescript
 - Node.Js
 - Prisma
+- Next.Js
+- Zod
+

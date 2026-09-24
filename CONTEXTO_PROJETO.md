@@ -1,6 +1,6 @@
-# 📋 Documentação de Contexto do Projeto - Sistema de Pizzaria
+# Documentação de Contexto do Projeto - Sistema de Pizzaria
 
-## 📖 Índice
+## Índice
 
 1. [Visão Geral](#visão-geral)
 2. [Arquitetura](#arquitetura)
@@ -15,13 +15,13 @@
 
 ---
 
-## 🎯 Visão Geral
+## Visão Geral
 
 Sistema backend de gerenciamento de pizzaria desenvolvido em Node.js com TypeScript, utilizando Express como framework web, Prisma ORM para comunicação com banco de dados PostgreSQL, e Zod para validação de dados.
 
 ---
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 O projeto segue o padrão **MVC + Service Layer**, com a seguinte estrutura:
 
@@ -46,7 +46,7 @@ Requisição HTTP → Rotas → Middlewares → Controller → Service → Banco
 
 ---
 
-## 🚀 Tecnologias e Versões
+## Tecnologias e Versões
 
 ### Dependências de Produção
 

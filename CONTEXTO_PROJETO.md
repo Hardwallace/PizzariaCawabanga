@@ -397,6 +397,25 @@ Valida criação de categorias:
 
 - Nome inválido: "Nome da categoria precisa ter 2 caracteres"
 
+### Product Schemas (`schemas/productSchema.ts`)
+
+#### **createProductSchema**
+
+Valida os campos textuais enviados no corpo da requisição:
+
+```typescript
+{
+  body: {
+    name: string (min: 1 caractere),
+    price: string (min: 1 caractere),
+    description: string (min: 1 caractere),
+    category_id: string
+  }
+}
+```
+
+O schema valida a presença/tipo dos campos, mas não valida se `price` é numérico. O controller converte o valor com `parseInt`.
+
 ---
 
 ## 🌐 Endpoints
@@ -503,7 +522,7 @@ Authorization: Bearer <token>
 
 Cria uma nova categoria de produtos.
 
-**Middlewares**: `isAuthenticated`, `isAdmin`, `validateSchema(createCategorySchema)`
+**Middlewares**: `IsAuthenticated`, `IsAdmin`, `validateSchema(createCategorySchema)`
 
 **Permissão**: Apenas usuários com role ADMIN
 
@@ -530,6 +549,82 @@ Authorization: Bearer <token>
   "createdAt": "2025-11-11T10:30:00.000Z"
 }
 ```
+
+O service seleciona e retorna somente `id`, `name` e `createdAt`.
+
+---
+
+#### **GET /category**
+
+Lista as categorias em ordem decrescente de criação (mais recentes primeiro).
+
+**Middlewares**: `IsAuthenticated`
+
+**Headers**:
+
+```
+Authorization: Bearer <token>
+```
+
+**Resposta de Sucesso (200)**:
+
+```json
+[
+  {
+    "id": "uuid-da-categoria",
+    "name": "Pizzas Doces",
+    "createdAt": "2026-09-30T10:30:00.000Z"
+  }
+]
+```
+
+O endpoint retorna um array, que pode estar vazio. Cada elemento contém somente `id`, `name` e `createdAt`.
+
+---
+
+### **Produtos**
+
+#### **POST /product**
+
+Cria um produto e envia sua imagem para o Cloudinary.
+
+**Middlewares**: `IsAuthenticated`, `IsAdmin`, `multer().single("file")`, `validateSchema(createProductSchema)`
+
+**Permissão**: Apenas usuários com role ADMIN.
+
+**Headers**:
+
+```
+Authorization: Bearer <token>
+Content-Type: multipart/form-data
+```
+
+**Campos do formulário**:
+
+| Campo | Tipo enviado | Obrigatório | Descrição |
+| ----- | ------------ | ----------- | --------- |
+| `name` | texto | Sim | Nome do produto |
+| `price` | texto | Sim | Preço; convertido para inteiro com `parseInt` |
+| `description` | texto | Sim | Descrição do produto |
+| `category_id` | texto | Sim | ID de uma categoria existente |
+| `file` | arquivo | Sim | Imagem enviada como arquivo multipart |
+
+Se `file` não for enviado, o controller lança o erro `A imagem do produto é obrigatória`. A categoria precisa existir; caso contrário, o service lança `Categoria não encontrada`. O upload da imagem é feito antes de salvar o produto no banco.
+
+**Resposta de Sucesso (200)**:
+
+```json
+{
+  "id": "uuid-do-produto",
+  "name": "Pizza de Chocolate",
+  "price": 4500,
+  "description": "Pizza doce de chocolate",
+  "banner": "https://res.cloudinary.com/...",
+  "category_id": "uuid-da-categoria"
+}
+```
+
+O valor de `price` é persistido como inteiro, e `banner` contém a URL segura retornada pelo Cloudinary. A resposta seleciona somente os campos exibidos acima.
 
 ---
 
@@ -802,5 +897,5 @@ npm run dev
 
 ---
 
-**Documento gerado em**: 11/11/2025  
+**Documento gerado em**: 11/09/2026  
 **Versão do Projeto**: 1.0.0

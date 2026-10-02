@@ -12,7 +12,9 @@ import { validateSchema } from "./middlewares/validateSchema";
 import { createCategorySchema } from "./schemas/categorySchema";
 import { authUserSchema, createUserSchema } from "./schemas/userSchema";
 import { CreateProductController } from "./controllers/product/CreateProductController";
-import { createProductSchema} from "./schemas/productSchema";
+import { createProductSchema, listProductSchema} from "./schemas/productSchema";
+import { ListProductController } from "./controllers/product/ListProductController";
+import { ListProductService } from "./services/product/ListProductService";
 
 const router = Router();
 const upload = multer();
@@ -43,5 +45,7 @@ router.post(
 router.get("/category", IsAuthenticated, new ListCategoryController().handle);
 
 router.post("/product", IsAuthenticated, IsAdmin, upload.single("file"), validateSchema(createProductSchema) , new CreateProductController().handle);
+
+router.get("/products", IsAuthenticated, validateSchema(listProductSchema), new ListProductController().handle);
 
 export { router };

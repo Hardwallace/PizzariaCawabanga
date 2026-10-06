@@ -12,10 +12,17 @@ import { validateSchema } from "./middlewares/validateSchema";
 import { createCategorySchema } from "./schemas/categorySchema";
 import { authUserSchema, createUserSchema } from "./schemas/userSchema";
 import { CreateProductController } from "./controllers/product/CreateProductController";
-import { createProductSchema, listProductSchema} from "./schemas/productSchema";
+import { createProductSchema, listProductSchema, listProductByCategorySchema} from "./schemas/productSchema";
+import { ListProductByCategoryController } from "./controllers/product/ListProductByCategoryController";
 import { ListProductController } from "./controllers/product/ListProductController";
 import { ListProductService } from "./services/product/ListProductService";
 import { DeleteProductController } from "./controllers/product/DeleteProductController";
+import { createOrderSchema } from "./schemas/orderSchema";
+import { CreateOrderController } from "./controllers/order/CreateOrderController";
+// import { CreateOrderService } from "./services/order/CreateOrderService";
+import {ListOrdersController} from "./controllers/order/ListOrdersController";
+import { AddItemController } from "./controllers/order/AddItemController";
+import { addItemSchema } from "./schemas/orderSchema";
 
 const router = Router();
 const upload = multer();
@@ -50,5 +57,13 @@ router.post("/product", IsAuthenticated, IsAdmin, upload.single("file"), validat
 router.get("/products", IsAuthenticated, validateSchema(listProductSchema), new ListProductController().handle);
 
 router.delete("/product", IsAuthenticated, IsAdmin, new DeleteProductController().handle);
+
+router.get("/category/product", IsAuthenticated, validateSchema(listProductByCategorySchema), new ListProductByCategoryController().handle);
+
+router.post("/order", IsAuthenticated, validateSchema(createOrderSchema), new CreateOrderController().handle);
+
+router.get("/orders", IsAuthenticated, new ListOrdersController().handle);
+
+router.post("/order/add", IsAuthenticated, validateSchema(addItemSchema), new AddItemController().handle);
 
 export { router };

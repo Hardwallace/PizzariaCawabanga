@@ -15,7 +15,7 @@ import { CreateProductController } from "./controllers/product/CreateProductCont
 import { createProductSchema, listProductSchema, listProductByCategorySchema} from "./schemas/productSchema";
 import { ListProductByCategoryController } from "./controllers/product/ListProductByCategoryController";
 import { ListProductController } from "./controllers/product/ListProductController";
-import { ListProductService } from "./services/product/ListProductService";
+// import { ListProductService } from "./services/product/ListProductService";
 import { DeleteProductController } from "./controllers/product/DeleteProductController";
 import { createOrderSchema } from "./schemas/orderSchema";
 import { CreateOrderController } from "./controllers/order/CreateOrderController";
@@ -23,6 +23,8 @@ import { CreateOrderController } from "./controllers/order/CreateOrderController
 import {ListOrdersController} from "./controllers/order/ListOrdersController";
 import { AddItemController } from "./controllers/order/AddItemController";
 import { addItemSchema } from "./schemas/orderSchema";
+import { RemoveItemController } from "./controllers/order/RemoveItemController";
+import { removeItemSchema } from "./schemas/orderSchema";
 
 const router = Router();
 const upload = multer();
@@ -65,5 +67,7 @@ router.post("/order", IsAuthenticated, validateSchema(createOrderSchema), new Cr
 router.get("/orders", IsAuthenticated, new ListOrdersController().handle);
 
 router.post("/order/add", IsAuthenticated, validateSchema(addItemSchema), new AddItemController().handle);
+
+router.delete("/order/remove", IsAuthenticated, validateSchema(removeItemSchema), new RemoveItemController().handle);
 
 export { router };

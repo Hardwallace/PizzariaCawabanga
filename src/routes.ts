@@ -1,6 +1,5 @@
 import { Router } from "express";
 import multer from 'multer';
-//import uploadConfig from './config/multer';
 import { CreateCategoryController } from "./controllers/category/CreateCategoryController";
 import { ListCategoryController } from "./controllers/category/ListCategoryController";
 import { AuthUserController } from "./controllers/user/authUserController";
@@ -15,16 +14,20 @@ import { CreateProductController } from "./controllers/product/CreateProductCont
 import { createProductSchema, listProductSchema, listProductByCategorySchema} from "./schemas/productSchema";
 import { ListProductByCategoryController } from "./controllers/product/ListProductByCategoryController";
 import { ListProductController } from "./controllers/product/ListProductController";
-// import { ListProductService } from "./services/product/ListProductService";
 import { DeleteProductController } from "./controllers/product/DeleteProductController";
 import { createOrderSchema } from "./schemas/orderSchema";
 import { CreateOrderController } from "./controllers/order/CreateOrderController";
-// import { CreateOrderService } from "./services/order/CreateOrderService";
 import {ListOrdersController} from "./controllers/order/ListOrdersController";
 import { AddItemController } from "./controllers/order/AddItemController";
 import { addItemSchema } from "./schemas/orderSchema";
 import { RemoveItemController } from "./controllers/order/RemoveItemController";
 import { removeItemSchema } from "./schemas/orderSchema";
+import { DetailOrderController } from "./controllers/order/DetailOrderController";
+import { detailOrderSchema } from "./schemas/orderSchema";
+import { sendOrderSchema } from "./schemas/orderSchema";
+import { SendOrderController } from "./controllers/order/SendOrderController";
+import { FinishOrderController } from "./controllers/order/FinishOrderController";
+import { finishOrderSchema } from "./schemas/orderSchema";
 
 const router = Router();
 const upload = multer();
@@ -69,5 +72,12 @@ router.get("/orders", IsAuthenticated, new ListOrdersController().handle);
 router.post("/order/add", IsAuthenticated, validateSchema(addItemSchema), new AddItemController().handle);
 
 router.delete("/order/remove", IsAuthenticated, validateSchema(removeItemSchema), new RemoveItemController().handle);
+
+router.get("/order/detail", IsAuthenticated, validateSchema(detailOrderSchema), new DetailOrderController().handle);
+
+router.put("/order/send", IsAuthenticated, validateSchema(sendOrderSchema), new SendOrderController().handle);
+
+router.put("/order/finish", IsAuthenticated, validateSchema(finishOrderSchema), new FinishOrderController().handle);
+
 
 export { router };

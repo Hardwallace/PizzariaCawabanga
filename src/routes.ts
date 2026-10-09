@@ -28,6 +28,8 @@ import { sendOrderSchema } from "./schemas/orderSchema";
 import { SendOrderController } from "./controllers/order/SendOrderController";
 import { FinishOrderController } from "./controllers/order/FinishOrderController";
 import { finishOrderSchema } from "./schemas/orderSchema";
+import { DeleteOrderController } from "./controllers/order/DeleteOrderController";
+import { deleteOrderSchema } from "./schemas/orderSchema";
 
 const router = Router();
 const upload = multer();
@@ -66,6 +68,8 @@ router.delete("/product", IsAuthenticated, IsAdmin, new DeleteProductController(
 router.get("/category/product", IsAuthenticated, validateSchema(listProductByCategorySchema), new ListProductByCategoryController().handle);
 
 router.post("/order", IsAuthenticated, validateSchema(createOrderSchema), new CreateOrderController().handle);
+
+router.delete("/order", IsAuthenticated, validateSchema(deleteOrderSchema), new DeleteOrderController().handle);
 
 router.get("/orders", IsAuthenticated, new ListOrdersController().handle);
 
